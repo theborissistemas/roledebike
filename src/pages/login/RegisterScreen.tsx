@@ -1,5 +1,5 @@
 import React, {memo, useState} from 'react';
-import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Background from '../../componentes/Background';
 import Logo from '../../componentes/Logo';
 import Header from '../../componentes/Header';
@@ -7,22 +7,29 @@ import Button from '../../componentes/Button';
 import TextInput from '../../componentes/TextInput';
 import BackButton from '../../componentes/BackButton';
 import {theme} from '../../core/theme';
-import {emailValidator, passwordValidator} from '../../core/utils';
 import {Navigation} from '../../types';
+import {
+  emailValidator,
+  passwordValidator,
+  nameValidator,
+} from '../../core/utils';
 
 type Props = {
   navigation: Navigation;
 };
 
-const LoginPage = ({navigation}: Props) => {
+const RegisterScreen = ({navigation}: Props) => {
+  const [name, setName] = useState({value: '', error: ''});
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
 
-  const _onLoginPressed = () => {
+  const _onSignUpPressed = () => {
+    const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
 
-    if (emailError || passwordError) {
+    if (emailError || passwordError || nameError) {
+      setName({...name, error: nameError});
       setEmail({...email, error: emailError});
       setPassword({...password, error: passwordError});
       return;
@@ -37,7 +44,16 @@ const LoginPage = ({navigation}: Props) => {
 
       <Logo />
 
-      <Header>Seja Bem Vindo</Header>
+      <Header>Create Account</Header>
+
+      <TextInput
+        label="Name"
+        returnKeyType="next"
+        value={name.value}
+        onChangeText={text => setName({value: text, error: ''})}
+        error={!!name.error}
+        errorText={name.error}
+      />
 
       <TextInput
         label="Email"
@@ -53,7 +69,7 @@ const LoginPage = ({navigation}: Props) => {
       />
 
       <TextInput
-        label="Senha"
+        label="Password"
         returnKeyType="done"
         value={password.value}
         onChangeText={text => setPassword({value: text, error: ''})}
@@ -62,21 +78,14 @@ const LoginPage = ({navigation}: Props) => {
         secureTextEntry
       />
 
-      <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-          <Text style={styles.label}>Esqueceu a senha?</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Button mode="contained" onPress={_onLoginPressed}>
-        Login
+      <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
+        Sign Up
       </Button>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Não possui conta? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
-          <Text style={styles.link}>Criar Conta</Text>
+        <Text style={styles.label}>Already have an account? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+          <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>
     </Background>
@@ -84,17 +93,15 @@ const LoginPage = ({navigation}: Props) => {
 };
 
 const styles = StyleSheet.create({
-  forgotPassword: {
-    width: '100%',
-    alignItems: 'flex-end',
-    marginBottom: 24,
+  label: {
+    color: theme.colors.secondary,
+  },
+  button: {
+    marginTop: 24,
   },
   row: {
     flexDirection: 'row',
     marginTop: 4,
-  },
-  label: {
-    color: theme.colors.secondary,
   },
   link: {
     fontWeight: 'bold',
@@ -102,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(LoginPage);
+export default memo(RegisterScreen);
