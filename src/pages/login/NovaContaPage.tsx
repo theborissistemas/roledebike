@@ -13,17 +13,18 @@ import {
   passwordValidator,
   nameValidator,
 } from '../../core/utils';
+import firebase from 'react-native-firebase';
 
 type Props = {
   navigation: Navigation;
 };
 
-const RegisterScreen = ({navigation}: Props) => {
+const NovaContaPage = ({navigation}: Props) => {
   const [name, setName] = useState({value: '', error: ''});
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
 
-  const _onSignUpPressed = () => {
+  const onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
@@ -33,9 +34,14 @@ const RegisterScreen = ({navigation}: Props) => {
       setEmail({...email, error: emailError});
       setPassword({...password, error: passwordError});
       return;
+    } else {
+      return firebase
+        .auth()
+        .createUserWithEmailAndPassword(email.value, password.value)
+        .then(() => navigation.navigate('Dashboard'));
     }
 
-    navigation.navigate('Dashboard');
+    // navigation.navigate('Dashboard');
   };
 
   return (
@@ -78,7 +84,7 @@ const RegisterScreen = ({navigation}: Props) => {
         secureTextEntry
       />
 
-      <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
+      <Button mode="contained" onPress={onSignUpPressed} style={styles.button}>
         Sign Up
       </Button>
 
@@ -109,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(RegisterScreen);
+export default memo(NovaContaPage);

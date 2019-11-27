@@ -9,16 +9,18 @@ import BackButton from '../../componentes/BackButton';
 import {theme} from '../../core/theme';
 import {emailValidator, passwordValidator} from '../../core/utils';
 import {Navigation} from '../../types';
+import firebase from 'react-native-firebase';
 
 type Props = {
   navigation: Navigation;
 };
 
 const LoginPage = ({navigation}: Props) => {
-  const [email, setEmail] = useState({value: '', error: ''});
-  const [password, setPassword] = useState({value: '', error: ''});
+  const [email, setEmail] = useState<any>({value: '', error: ''});
+  const [password, setPassword] = useState<any>({value: '', error: ''});
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const _onLoginPressed = () => {
+  const onLoginPressed = () => {
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
 
@@ -26,9 +28,19 @@ const LoginPage = ({navigation}: Props) => {
       setEmail({...email, error: emailError});
       setPassword({...password, error: passwordError});
       return;
-    }
+    } else {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email.value, password.value)
+        .then(() => {
+          navigation.navigate('Dashboard');
+        })
+        .catch(error => {
+          setErrorMessage(error.message);
 
-    navigation.navigate('Dashboard');
+          return;
+        });
+    }
   };
 
   return (
@@ -38,6 +50,10 @@ const LoginPage = ({navigation}: Props) => {
       <Logo />
 
       <Header>Seja Bem Vindo</Header>
+
+      {errorMessage.length > 0 && (
+        <Text style={{color: 'red'}}>{errorMessage}</Text>
+      )}
 
       <TextInput
         label="Email"
@@ -64,18 +80,18 @@ const LoginPage = ({navigation}: Props) => {
 
       <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+          onPress={() => navigation.navigate('RecuperarSenhaPage')}>
           <Text style={styles.label}>Esqueceu a senha?</Text>
         </TouchableOpacity>
       </View>
 
-      <Button mode="contained" onPress={_onLoginPressed}>
+      <Button mode="contained" onPress={onLoginPressed}>
         Login
       </Button>
 
       <View style={styles.row}>
         <Text style={styles.label}>Não possui conta? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('NovaContaPage')}>
           <Text style={styles.link}>Criar Conta</Text>
         </TouchableOpacity>
       </View>

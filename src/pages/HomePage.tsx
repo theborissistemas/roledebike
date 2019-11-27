@@ -10,7 +10,7 @@ type Props = {
   navigation: Navigation;
 };
 
-const HomeScreen = ({navigation}: Props) => (
+const HomePage = ({navigation}: Props) => (
   <Background>
     <Logo />
     <Header>Conectar</Header>
@@ -23,10 +23,10 @@ const HomeScreen = ({navigation}: Props) => (
     </Button>
     <Button
       mode="outlined"
-      onPress={() => navigation.navigate('RegisterScreen')}>
+      onPress={() => navigation.navigate('NovaContaPage')}>
       Cadastrar
     </Button>
   </Background>
 );
 
-export default memo(HomeScreen);
+export default memo(HomePage);

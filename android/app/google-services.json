@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "208822194440",
+    "firebase_url": "https://role-de-bike-c4da2.firebaseio.com",
+    "project_id": "role-de-bike-c4da2",
+    "storage_bucket": "role-de-bike-c4da2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208822194440:android:2159d04b5cce73b43c9cbd",
+        "android_client_info": {
+          "package_name": "com.roledebike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208822194440-3d8f3j2ftq5p1qaq9im80fcbha0c8tlb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnQMia5ZVucHz6byYBikSTc9RhT6EeTzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208822194440-3d8f3j2ftq5p1qaq9im80fcbha0c8tlb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
