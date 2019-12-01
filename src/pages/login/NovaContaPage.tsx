@@ -23,7 +23,6 @@ const NovaContaPage = ({navigation}: Props) => {
   const [name, setName] = useState({value: '', error: ''});
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
-  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
@@ -36,25 +35,31 @@ const NovaContaPage = ({navigation}: Props) => {
       setPassword({...password, error: passwordError});
       return;
     } else {
-      return firebase
+      firebase
         .auth()
         .createUserWithEmailAndPassword(email.value, password.value)
         .then(() => navigation.navigate('Dashboard'))
         .catch(error => {
-          setErrorMessage(error.errorMessage);
+          if (error.code === 'auth/email-already-in-use') {
+            setEmail({...email, error: 'E-mail já está sendo utilizado.'});
+          } else if (error.code === 'auth/weak-password') {
+            setPassword({
+              ...password,
+              error: 'Senha deve ter no mínimo 6 caracteres.',
+            });
+          }
+          return;
         });
     }
   };
 
   return (
     <Background>
-      <BackButton goBack={() => navigation.navigate('HomeScreen')} />
+      <BackButton goBack={() => navigation.navigate('HomePage')} />
 
       <Logo />
 
       <Header>Criar Nova Conta</Header>
-
-      {!!errorMessage && <Text style={{color: 'red'}}>{errorMessage}</Text>}
 
       <TextInput
         label="Name"

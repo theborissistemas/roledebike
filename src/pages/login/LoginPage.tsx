@@ -47,7 +47,7 @@ const LoginPage = ({navigation}: Props) => {
 
   return (
     <Background>
-      <BackButton goBack={() => navigation.navigate('HomeScreen')} />
+      <BackButton goBack={() => navigation.navigate('HomePage')} />
 
       <Logo />
 
