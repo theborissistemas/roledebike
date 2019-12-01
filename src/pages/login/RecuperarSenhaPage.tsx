@@ -14,10 +14,10 @@ type Props = {
   navigation: Navigation;
 };
 
-const ForgotPasswordScreen = ({navigation}: Props) => {
+const RecuperarSenhaPage = ({navigation}: Props) => {
   const [email, setEmail] = useState({value: '', error: ''});
 
-  const _onSendPressed = () => {
+  const onSendPressed = () => {
     const emailError = emailValidator(email.value);
 
     if (emailError) {
@@ -49,7 +49,7 @@ const ForgotPasswordScreen = ({navigation}: Props) => {
         keyboardType="email-address"
       />
 
-      <Button mode="contained" onPress={_onSendPressed} style={styles.button}>
+      <Button mode="contained" onPress={onSendPressed} style={styles.button}>
         Reconfigurar a senha
       </Button>
 
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(ForgotPasswordScreen);
+export default memo(RecuperarSenhaPage);

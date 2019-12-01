@@ -13,17 +13,19 @@ import {
   passwordValidator,
   nameValidator,
 } from '../../core/utils';
+import firebase from 'react-native-firebase';
 
 type Props = {
   navigation: Navigation;
 };
 
-const RegisterScreen = ({navigation}: Props) => {
+const NovaContaPage = ({navigation}: Props) => {
   const [name, setName] = useState({value: '', error: ''});
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const _onSignUpPressed = () => {
+  const onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
@@ -33,9 +35,15 @@ const RegisterScreen = ({navigation}: Props) => {
       setEmail({...email, error: emailError});
       setPassword({...password, error: passwordError});
       return;
+    } else {
+      return firebase
+        .auth()
+        .createUserWithEmailAndPassword(email.value, password.value)
+        .then(() => navigation.navigate('Dashboard'))
+        .catch(error => {
+          setErrorMessage(error.errorMessage);
+        });
     }
-
-    navigation.navigate('Dashboard');
   };
 
   return (
@@ -44,7 +52,9 @@ const RegisterScreen = ({navigation}: Props) => {
 
       <Logo />
 
-      <Header>Create Account</Header>
+      <Header>Criar Nova Conta</Header>
+
+      {!!errorMessage && <Text style={{color: 'red'}}>{errorMessage}</Text>}
 
       <TextInput
         label="Name"
@@ -78,13 +88,13 @@ const RegisterScreen = ({navigation}: Props) => {
         secureTextEntry
       />
 
-      <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
-        Sign Up
+      <Button mode="contained" onPress={onSignUpPressed} style={styles.button}>
+        Criar
       </Button>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+        <Text style={styles.label}>Já possui uma conta? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>
@@ -109,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(RegisterScreen);
+export default memo(NovaContaPage);
