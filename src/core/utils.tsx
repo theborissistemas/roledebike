@@ -10,6 +10,9 @@ export const emailValidator = (email: string) => {
 export const passwordValidator = (password: string) => {
   if (!password || password.length <= 0) return 'Senha não pode ser vazia.';
 
+  if (!password || password.length < 6)
+    return 'Senha deve ter no mínimo 6 caracteres.';
+
   return '';
 };
 
