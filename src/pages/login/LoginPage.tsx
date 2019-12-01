@@ -36,7 +36,9 @@ const LoginPage = ({navigation}: Props) => {
           navigation.navigate('Dashboard');
         })
         .catch(error => {
-          setErrorMessage(error.message);
+          setErrorMessage(
+            'Login e/ou senha incorretos. Verifique os dados e tente novamente.',
+          );
 
           return;
         });

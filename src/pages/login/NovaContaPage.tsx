@@ -23,6 +23,7 @@ const NovaContaPage = ({navigation}: Props) => {
   const [name, setName] = useState({value: '', error: ''});
   const [email, setEmail] = useState({value: '', error: ''});
   const [password, setPassword] = useState({value: '', error: ''});
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
@@ -38,10 +39,11 @@ const NovaContaPage = ({navigation}: Props) => {
       return firebase
         .auth()
         .createUserWithEmailAndPassword(email.value, password.value)
-        .then(() => navigation.navigate('Dashboard'));
+        .then(() => navigation.navigate('Dashboard'))
+        .catch(error => {
+          setErrorMessage(error.errorMessage);
+        });
     }
-
-    // navigation.navigate('Dashboard');
   };
 
   return (
@@ -50,7 +52,9 @@ const NovaContaPage = ({navigation}: Props) => {
 
       <Logo />
 
-      <Header>Create Account</Header>
+      <Header>Criar Nova Conta</Header>
+
+      {!!errorMessage && <Text style={{color: 'red'}}>{errorMessage}</Text>}
 
       <TextInput
         label="Name"
@@ -85,12 +89,12 @@ const NovaContaPage = ({navigation}: Props) => {
       />
 
       <Button mode="contained" onPress={onSignUpPressed} style={styles.button}>
-        Sign Up
+        Criar
       </Button>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+        <Text style={styles.label}>Já possui uma conta? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('LoginPage')}>
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>
